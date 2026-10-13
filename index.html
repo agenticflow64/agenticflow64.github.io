@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>agenticflow — backend + AI-агенты</title>
+<meta name="description" content="Backend-разработчик, который встраивает AI-агентов в реальную инфраструктуру. Java/Kotlin Spring, 2 года в финтехе. RAG-боты, Telegram Mini App, n8n-автоматизация, интеграции.">
+<link rel="icon" type="image/png" href="avatar.png">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-alt: #f6f8fa;
+    --text: #1f2328;
+    --text-muted: #57606a;
+    --border: #d0d7de;
+    --accent: #0969da;
+    --radius: 6px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+  /* Навигация */
+  .nav {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px 20px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .nav-logo {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 16px;
+  }
+  .nav-logo:hover { text-decoration: none; color: var(--accent); }
+  .nav-links { display: flex; gap: 20px; font-size: 14px; }
+  .nav-links a { color: var(--text-muted); }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* Шапка */
+  .header { padding: 64px 0 56px; }
+  .header-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+  }
+  .header img {
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .header h1 {
+    font-size: 28px;
+    line-height: 1.25;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+  }
+  .tagline {
+    font-size: 18px;
+    color: var(--text);
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
+  .header-bio {
+    color: var(--text-muted);
+    margin: 0 0 16px;
+    max-width: 640px;
+  }
+  .contact-links { display: flex; flex-wrap: wrap; gap: 12px 24px; font-size: 15px; }
+  .contact-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Кнопки */
+  .btn {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-alt);
+    color: var(--text);
+    font-size: 14px;
+  }
+  .btn:hover { background: #eef1f4; text-decoration: none; border-color: #afb8c1; }
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent) ;
+    color: #ffffff;
+  }
+  .btn-primary:hover { background: #0a58ca; border-color: #0a58ca; }
+
+  /* Секции */
+  .section { padding: 40px 0 56px; }
+  .section-title {
+    font-size: 22px;
+    margin: 0 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+
+  /* Услуги */
+  .services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .service {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    background: var(--bg);
+  }
+  .service:hover { border-color: #afb8c1; background: var(--bg-alt); }
+  .service h3 { margin: 0 0 6px; font-size: 16px; }
+  .service p { margin: 0; color: var(--text-muted); font-size: 14px; }
+
+  /* Кейсы */
+  .cases {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .case {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    background: var(--bg);
+  }
+  .case:hover { border-color: #afb8c1; background: var(--bg-alt); }
+  .case-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .case h3 { margin: 0; font-size: 18px; letter-spacing: -0.01em; }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: var(--bg-alt);
+    white-space: nowrap;
+  }
+  .badge-prod {
+    color: #ffffff;
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .case-task { color: var(--text-muted); margin: 6px 0 14px; }
+  .case h4 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .case-solution { margin-bottom: 14px; }
+  .case-solution ul, .case-metrics ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .case-solution li, .case-metrics li { margin: 3px 0; font-size: 15px; }
+  .case-metrics { margin-bottom: 14px; }
+  .case-metrics strong { color: var(--text); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .chip {
+    display: inline-block;
+    padding: 2px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg-alt);
+    color: var(--text-muted);
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+  .case-links { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  /* Футер */
+  .footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg-alt);
+    padding: 32px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .footer .container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+  }
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+
+  @media (min-width: 900px) {
+    .cases { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .header { padding: 40px 0 32px; }
+    .header-row { flex-direction: column; }
+    .header img { width: 80px; height: 80px; }
+    .header h1 { font-size: 24px; }
+    .section { padding: 28px 0 40px; }
+    .case { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#top">agenticflow</a>
+    <div class="nav-links">
+      <a href="#services">Услуги</a>
+      <a href="#cases">Кейсы</a>
+      <a href="#contacts">Контакты</a>
+    </div>
+  </div>
+</nav>
+
+<header class="header" id="top">
+  <div class="container">
+    <div class="header-row">
+      <img src="avatar.png" alt="Аватар agenticflow" width="96" height="96">
+      <div>
+        <h1>agenticflow</h1>
+        <p class="tagline">Backend-разработчик, который встраивает AI-агентов в реальную инфраструктуру</p>
+        <p class="header-bio">
+          Backend Java/Kotlin (Spring), 2 года в финтехе. Python и AI-агенты: RAG, LLM-оркестрация, n8n.
+          Инфраструктура: Docker, Kubernetes, PostgreSQL, Kafka. Автоматизация, которая встраивается
+          в рабочие процессы, а не «просто чат-бот».
+        </p>
+        <div class="contact-links">
+          <a href="https://t.me/agenticflow_dev">Telegram: @agenticflow_dev</a>
+          <a href="https://github.com/agenticflow64">GitHub: agenticflow64</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="section" id="services">
+  <div class="container">
+    <h2 class="section-title">Услуги</h2>
+    <div class="services">
+      <div class="service">
+        <h3>AI-боты и RAG по базе знаний</h3>
+        <p>Ответы по вашей документации и регламентам со ссылками на источники, честным отказом вне базы, локальными эмбеддингами.</p>
+      </div>
+      <div class="service">
+        <h3>Telegram Mini App и боты под ключ</h3>
+        <p>Магазины и сервисы внутри Telegram: авторизация без паролей, каталог, заказы, админ-панель с аналитикой.</p>
+      </div>
+      <div class="service">
+        <h3>n8n-автоматизация бизнес-процессов</h3>
+        <p>Приём заявок 24/7: Telegram или форма → классификация LLM → реестр или CRM → уведомления. Со страховкой на случай падения API.</p>
+      </div>
+      <div class="service">
+        <h3>Интеграции и бэкенд</h3>
+        <p>REST API, базы данных (PostgreSQL, pgvector), очереди (Kafka), доработка Spring-сервисов, парсинг и агрегация данных.</p>
+      </div>
+      <div class="service">
+        <h3>Мониторинг и наблюдаемость</h3>
+        <p>Prometheus, Grafana, алерты с объяснением на естественном языке: что случилось, вероятная причина, что проверить.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="cases">
+  <div class="container">
+    <h2 class="section-title">Кейсы</h2>
+    <div class="cases">
+
+      <!-- 1. kashtanka-site -->
+      <article class="case">
+        <div class="case-top">
+          <h3>Сайт ветеринарной клиники «под ключ»</h3>
+          <span class="badge badge-prod">Реальный прод, в эксплуатации</span>
+        </div>
+        <p class="case-task">Сайт работающей клиники: услуги и цены, приём обращений — на собственной инфраструктуре, без конструкторов и сторонних SaaS. Срок: около месяца.</p>
+        <div class="case-solution">
+          <h4>Решение</h4>
+          <ul>
+            <li>Backend на Kotlin + Quarkus (REST, jOOQ, Liquibase), PostgreSQL с отдельными схемами для приложения, аналитики и логов.</li>
+            <li>Frontend на Astro (SSR): все страницы индексируются для SEO, навигация без перезагрузки.</li>
+            <li>Свой кластер Kubernetes (k3s) с Traefik и TLS, деплой новой версии по тегу через CI — без ручных операций на сервере.</li>
+            <li>Наблюдаемость (VictoriaMetrics, Grafana) и аналитика с первого дня: Яндекс.Метрика + self-hosted Umami.</li>
+          </ul>
+        </div>
+        <div class="case-metrics">
+          <h4>Результат</h4>
+          <ul>
+            <li>Сайт работает в продакшене: <strong>kashtanka64.ru</strong></li>
+            <li>Разработан и запущен за <strong>~1 месяц</strong> одним разработчиком</li>
+            <li>Полная индексация страниц (SSR), обновление прода — деплой по тегу через CI</li>
+          </ul>
+        </div>
+        <div class="chips">
+          <span class="chip">Kotlin</span><span class="chip">Quarkus</span><span class="chip">PostgreSQL</span><span class="chip">Astro</span><span class="chip">Kubernetes</span><span class="chip">Traefik</span><span class="chip">GitLab CI</span><span class="chip">VictoriaMetrics</span><span class="chip">Grafana</span>
+        </div>
+        <div class="case-links">
+          <a class="btn btn-primary" href="https://kashtanka64.ru">Живой сайт</a>
+        </div>
+        <!-- video: слот под демо-видео кейса (до 2 минут). Вставить вместо комментария:
+        <video controls preload="metadata" width="640" src="video/kashtanka-site.mp4"></video>
+        или YouTube/VK Видео: <iframe width="560" height="315" src="..." frameborder="0" allowfullscreen></iframe>
+        -->
+      </article>
+
+      <!-- 2. telegram-miniapp-shop -->
+      <article class="case">
+        <div class="case-top">
+          <h3>Интернет-магазин в Telegram Mini App</h3>
+          <span class="badge">Пет-проект</span>
+        </div>
+        <p class="case-task">Магазин, который живёт внутри Telegram: без сайта-витрины и регистрации. Пользователь пишет боту, открывает Mini App и сразу заказывает; владелец ведёт каталог в админке.</p>
+        <div class="case-solution">
+          <h4>Решение</h4>
+          <ul>
+            <li>Backend на Kotlin + Spring Boot 3: 37 REST-эндпоинтов, схема БД под Flyway, Swagger UI из коробки.</li>
+            <li>Авторизация без паролей: проверка подписи Telegram InitData (HMAC-SHA256) и своя пара JWT, роли USER и ADMIN.</li>
+            <li>Витрина на React 19: каталог с фильтрами, корзина, отзывы с фото, оплата картой/наличными/Telegram Stars; поиск на Elasticsearch.</li>
+            <li>Админ-панель: аналитика заказов, топ товаров, CRUD каталога с загрузкой фото.</li>
+          </ul>
+        </div>
+        <div class="case-metrics">
+          <h4>Результат</h4>
+          <ul>
+            <li>Сквозной сценарий бот → Mini App → каталог → корзина → заказ → отзыв, <strong>без единого экрана регистрации</strong></li>
+            <li><strong>7 сервисов</strong> поднимаются одной командой docker compose up</li>
+            <li>Демо-каталог: <strong>8 категорий, 45 товаров</strong> с атрибутами</li>
+          </ul>
+        </div>
+        <div class="chips">
+          <span class="chip">Kotlin</span><span class="chip">Spring Boot 3</span><span class="chip">React 19</span><span class="chip">TypeScript</span><span class="chip">PostgreSQL</span><span class="chip">Elasticsearch</span><span class="chip">aiogram 3</span><span class="chip">Docker Compose</span>
+        </div>
+        <div class="case-links">
+          <a class="btn" href="https://github.com/agenticflow64/telegram-miniapp-shop">Код</a>
+        </div>
+        <!-- video: слот под демо-видео кейса. Вставить вместо комментария:
+        <video controls preload="metadata" width="640" src="video/telegram-miniapp-shop.mp4"></video>
+        или iframe с видеохостинга.
+        -->
+      </article>
+
+      <!-- 3. n8n-order-bot -->
+      <article class="case">
+        <div class="case-top">
+          <h3>Бот приёма заказов на n8n + LLM</h3>
+          <span class="badge">Демо-стенд</span>
+        </div>
+        <p class="case-task">Малый сервис получает заказы в Telegram «как попало»: опечатки, капс, половина данных отсутствует. Нужно: свободный текст → структура в панели управления + понятное подтверждение клиенту, без ручного разбора диспетчером.</p>
+        <div class="case-solution">
+          <h4>Решение</h4>
+          <ul>
+            <li>n8n-конвейер с двумя каналами приёма: живой Telegram-бот (собранный long polling) и веб-эмулятор чата для демо без телефона.</li>
+            <li>LLM с жёстким промптом «свободный текст → строгий JSON»: услуга, детали, срочность, имя, контакт, признак валидности.</li>
+            <li>Надёжность: не распознано — автоповтор через 3 с, вторая неудача — эскалация оператору; клиент никогда не остаётся без ответа.</li>
+            <li>FastAPI + SQLite: pydantic-валидация, дедупликация повторов по хэшу, жизненный цикл заказа; админка с фильтрами и статусами.</li>
+          </ul>
+        </div>
+        <div class="case-metrics">
+          <h4>Результат</h4>
+          <ul>
+            <li>Извлечение всех полей на 12 реалистичных сообщениях с опечатками: <strong>12/12 (100%)</strong></li>
+            <li>Полный цикл «сообщение → заказ в БД → подтверждение»: <strong>~21 с</strong></li>
+            <li>Тесты pytest (API + e2e): <strong>23 passed</strong></li>
+            <li>LLM-часть на бесплатных моделях: себестоимость обработки <strong>0 ₽</strong></li>
+          </ul>
+        </div>
+        <div class="chips">
+          <span class="chip">n8n</span><span class="chip">OpenRouter API</span><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">SQLite</span><span class="chip">pytest</span><span class="chip">Docker Compose</span>
+        </div>
+        <div class="case-links">
+          <a class="btn" href="https://github.com/agenticflow64/n8n-order-bot">Код</a>
+        </div>
+        <!-- video: слот под демо-видео кейса. Вставить вместо комментария:
+        <video controls preload="metadata" width="640" src="video/n8n-order-bot.mp4"></video>
+        или iframe с видеохостинга.
+        -->
+      </article>
+
+      <!-- 4. rag-bot -->
+      <article class="case">
+        <div class="case-top">
+          <h3>RAG-ассистент по базе знаний поддержки</h3>
+          <span class="badge">Демо-стенд</span>
+        </div>
+        <p class="case-task">Первая линия поддержки ищет ответы по чатам и таблицам. Нужен ассистент, который отвечает по внутренним регламентам, всегда даёт ссылку на раздел и честно отказывается, когда ответа в базе нет.</p>
+        <div class="case-solution">
+          <h4>Решение</h4>
+          <ul>
+            <li>Конвейер: 29 документов базы знаний → чанкинг по заголовкам → эмбеддинги bge-m3 локально на GPU → PostgreSQL + pgvector с HNSW-индексом.</li>
+            <li>Порог релевантности 0.45 откалиброван на реальных скорах: вопросы вне базы → корректный отказ вместо выдумки.</li>
+            <li>Ответы со ссылками на документы; авто-fallback LLM-провайдера (основной → резерв).</li>
+            <li>Веб-интерфейс как рабочее окно поддержки: вопросы за смену слева, ответ с источниками справа.</li>
+          </ul>
+        </div>
+        <div class="case-metrics">
+          <h4>Результат</h4>
+          <ul>
+            <li>Hit rate источника: <strong>100% (16/16)</strong>; корректные отказы вне базы: <strong>100% (4/4)</strong>, ложных отказов 0</li>
+            <li>Retrieval: <strong>0,02 с</strong> (медиана); полный ответ — 4,9 с медиана на бесплатном тарифе LLM</li>
+            <li>Ингест: 29 документов → 151 чанк за <strong>14 с</strong> на GPU</li>
+            <li>Тесты: 13 unit + 8 integration — зелёные</li>
+          </ul>
+        </div>
+        <div class="chips">
+          <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">PostgreSQL</span><span class="chip">pgvector</span><span class="chip">bge-m3 (GPU)</span><span class="chip">Docker Compose</span>
+        </div>
+        <div class="case-links">
+          <a class="btn" href="https://github.com/agenticflow64/rag-bot">Код</a>
+        </div>
+        <!-- video: слот под демо-видео кейса. Вставить вместо комментария:
+        <video controls preload="metadata" width="640" src="video/rag-bot.mp4"></video>
+        или iframe с видеохостинга.
+        -->
+      </article>
+
+      <!-- 5. vet-ai-assistant -->
+      <article class="case">
+        <div class="case-top">
+          <h3>AI-ассистент ветеринарной клиники</h3>
+          <span class="badge">Демо-стенд</span>
+        </div>
+        <p class="case-task">Телефон — единственный канал клиники: администратор вручную отвечает на «сколько стоит…» и записывает данные. AI-виджет закрывает три сценария: ответы по прайсу, триаж срочности, запись на приём из живого диалога.</p>
+        <div class="case-solution">
+          <h4>Решение</h4>
+          <ul>
+            <li>RAG по публичному прайсу клиники: 347 услуг, категории восстановлены детерминированными правилами, поиск по косинусной близости.</li>
+            <li>Эмбеддинги bge-m3 отдельным процессом на GPU — без GPU-зависимостей в сервисе; полный ингест ~5 с.</li>
+            <li>Оркестрация без фреймворков: классификатор намерения → ответы / триаж / запись; дисклеймер триажа на уровне бэкенда, а не LLM.</li>
+            <li>Виджет в стиле сайта клиники + админка заявок со статусами; только бесплатные LLM с fallback-цепочкой.</li>
+          </ul>
+        </div>
+        <div class="case-metrics">
+          <h4>Результат</h4>
+          <ul>
+            <li>Поиск по прайсу: <strong>11/12 (92%) top-1, 12/12 top-3</strong>; LLM назвал точную цену: <strong>12/12</strong></li>
+            <li>Триаж: <strong>3/3</strong> сценария — верный уровень срочности</li>
+            <li>Ингест 347 услуг с эмбеддингами: <strong>~5 с</strong> (GPU)</li>
+            <li>Тесты pytest (офлайн): <strong>30 passed</strong></li>
+          </ul>
+        </div>
+        <div class="chips">
+          <span class="chip">FastAPI</span><span class="chip">SQLite</span><span class="chip">bge-m3 (GPU)</span><span class="chip">OpenRouter API</span><span class="chip">Vanilla JS</span><span class="chip">pytest</span>
+        </div>
+        <div class="case-links">
+          <a class="btn" href="https://github.com/agenticflow64/vet-clinic-ai">Код</a>
+        </div>
+        <!-- video: слот под демо-видео кейса. Вставить вместо комментария:
+        <video controls preload="metadata" width="640" src="video/vet-ai-assistant.mp4"></video>
+        или iframe с видеохостинга.
+        -->
+      </article>
+
+      <!-- 6. lead-orchestrator -->
+      <article class="case">
+        <div class="case-top">
+          <h3>Агент-оркестратор заявок</h3>
+          <span class="badge">Демо-стенд</span>
+        </div>
+        <p class="case-task">Менеджер вручную читает заявки из Telegram, сортирует по типам и срочности, переносит в таблицу. Медленно, заявки теряются, спам съедает время.</p>
+        <div class="case-solution">
+          <h4>Решение</h4>
+          <ul>
+            <li>Конвейер: Telegram-webhook (Bot API) или веб-форма → LLM-классификация (тип, срочность, извлечение имени и контакта) → реестр → уведомление; спам подавляется.</li>
+            <li>Цепочка fallback: бесплатная LLM → детерминированные regex-правила — сервис работает даже при недоступности API.</li>
+            <li>Веб-дашборд: реестр плотной таблицей, срочность цветом, фильтры, статусы, CSV-экспорт, автообновление.</li>
+            <li>Docker Compose одной командой; n8n — опциональным профилем для визуальной оркестрации.</li>
+          </ul>
+        </div>
+        <div class="case-metrics">
+          <h4>Результат</h4>
+          <ul>
+            <li>Классификация на тестовом наборе: тип <strong>15/15</strong>, срочность <strong>15/15</strong>, извлечение полей <strong>30/30</strong></li>
+            <li>End-to-end от заявки до записи и уведомления: <strong>~2,8 с</strong></li>
+            <li>Regex-fallback: <strong>15/15, &lt;1 мс</strong> — страховка при падении API</li>
+            <li>Тесты: <strong>21 passed</strong> (unit + webhook + экспорт)</li>
+          </ul>
+        </div>
+        <div class="chips">
+          <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">SQLite</span><span class="chip">OpenRouter API</span><span class="chip">n8n</span><span class="chip">Docker Compose</span>
+        </div>
+        <div class="case-links">
+          <a class="btn" href="https://github.com/agenticflow64/lead-orchestrator">Код</a>
+        </div>
+        <!-- video: слот под демо-видео кейса. Вставить вместо комментария:
+        <video controls preload="metadata" width="640" src="video/lead-orchestrator.mp4"></video>
+        или iframe с видеохостинга.
+        -->
+      </article>
+
+      <!-- 7. homelab-monitor -->
+      <article class="case">
+        <div class="case-top">
+          <h3>Мониторинг-агент с объяснением алертов</h3>
+          <span class="badge">Демо-стенд</span>
+        </div>
+        <p class="case-task">Обычный мониторинг шлёт сырые алерты вида «node_filesystem_avail &lt; порога». Нужен слой, который превращает алерт в понятное объяснение с планом действий.</p>
+        <div class="case-solution">
+          <h4>Решение</h4>
+          <ul>
+            <li>Prometheus + Alertmanager → агент на FastAPI: cooldown-группировка всплесков, сбор контекста (метрики + логи Loki).</li>
+            <li>LLM-объяснение на русском по схеме «Что случилось / Вероятная причина / Что проверить».</li>
+            <li>Цепочка с ретраями: бесплатная LLM → rule-based fallback (сработал реально при сетевом сбое).</li>
+            <li>Веб-лента «сырой алерт → объяснение», демо-инциденты одной командой make, Grafana с автопровижинингом.</li>
+          </ul>
+        </div>
+        <div class="case-metrics">
+          <h4>Результат</h4>
+          <ul>
+            <li>ServiceDown: алерт → уведомление с объяснением <strong>~105 с</strong>, конвейер агента <strong>11 с</strong></li>
+            <li>Разбор инцидента по чек-листу агента: <strong>5–15 с</strong> против 1,5–3 мин вручную (сценарная оценка)</li>
+            <li>Тесты: 18 unit + 2 integration smoke — зелёные</li>
+          </ul>
+        </div>
+        <div class="chips">
+          <span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Prometheus</span><span class="chip">Alertmanager</span><span class="chip">Loki</span><span class="chip">Grafana</span><span class="chip">Docker Compose</span>
+        </div>
+        <div class="case-links">
+          <a class="btn" href="https://github.com/agenticflow64/homelab-monitor">Код</a>
+        </div>
+        <!-- video: слот под демо-видео кейса. Вставить вместо комментария:
+        <video controls preload="metadata" width="640" src="video/homelab-monitor.mp4"></video>
+        или iframe с видеохостинга.
+        -->
+      </article>
+
+      <!-- 8. skd-content-platform -->
+      <article class="case">
+        <div class="case-top">
+          <h3>SKD — платформа агрегации контента и персональных лент</h3>
+          <span class="badge">Пет-проект</span>
+        </div>
+        <p class="case-task">Контент размазан по десяткам Telegram-каналов и сайтов, повторы прилетают по три-четыре раза. Платформа сама собирает посты, схлопывает повторы, понимает тематику и собирает каждому пользователю свою ленту.</p>
+        <div class="case-solution">
+          <h4>Решение</h4>
+          <ul>
+            <li>Монорепо из подсистем вокруг общей плоскости данных: контент-пайплайн на Kotlin/Spring, GPU-воркер дедупликации (BGE-M3, классификатор EXACT/DUPLICATE/RELATED), рекомендательный сервис на FastAPI.</li>
+            <li>Платформа из шести микросервисов: шлюз с JWT, rate limiting и HMAC-подписью, события через Kafka (transactional outbox).</li>
+            <li>PostgreSQL 17 + pgvector с HNSW-индексами и замерами «до/после»; помесячное партиционирование, миграции Liquibase и Alembic.</li>
+            <li>Полный стек (11 сервисов) поднимается одним docker compose up; есть манифесты для Kubernetes; Flutter-клиент для Android и Web.</li>
+          </ul>
+        </div>
+        <div class="case-metrics">
+          <h4>Результат</h4>
+          <ul>
+            <li>Работающий end-to-end конвейер: источник → парсинг → дедупликация → NLP → персональная лента, с e2e-тестом полного цикла</li>
+            <li>Порядка <strong>630 автотестов</strong> в ML-подсистемах (dedup ~180, rec-system ~450) на Testcontainers</li>
+            <li>Ранжирование с разбивкой скоринга: вклад каждой компоненты можно объяснить построчно</li>
+          </ul>
+        </div>
+        <div class="chips">
+          <span class="chip">Kotlin</span><span class="chip">Spring Boot 3</span><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">PostgreSQL</span><span class="chip">pgvector</span><span class="chip">Kafka</span><span class="chip">Flutter</span><span class="chip">Docker Compose</span><span class="chip">Kubernetes</span>
+        </div>
+        <div class="case-links">
+          <a class="btn" href="https://github.com/agenticflow64/skd-content-platform">Код</a>
+        </div>
+        <!-- video: слот под демо-видео кейса. Вставить вместо комментария:
+        <video controls preload="metadata" width="640" src="video/skd-content-platform.mp4"></video>
+        или iframe с видеохостинга.
+        -->
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- Секция «Демо»: общий демо-ролик (обзор услуг и кейсов, до 2 минут).
+     Раскомментировать и вставить файл или ссылку, когда видео будет готово.
+
+<section class="section" id="demo">
+  <div class="container">
+    <h2 class="section-title">Демо</h2>
+    video: вставить общее демо-видео вместо комментария
+    <video controls preload="metadata" width="960" src="video/demo-overview.mp4"></video>
+    или iframe с видеохостинга: <iframe width="560" height="315" src="..." frameborder="0" allowfullscreen></iframe>
+  </div>
+</section>
+-->
+
+</main>
+
+<footer class="footer" id="contacts">
+  <div class="container">
+    <div>agenticflow — backend + AI-агенты. Работаю по самозанятости (НПД).</div>
+    <div class="footer-links">
+      <a href="https://github.com/agenticflow64">GitHub</a>
+      <a href="https://t.me/agenticflow_dev">Telegram: @agenticflow_dev</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
